@@ -15,8 +15,10 @@ async def async_setup_entry(
     controls = hass.data[DOMAIN][entry.entry_id]["controls"]
     entities = []
 
-    for device_id, device_data in controls.items():
-        device_controls = device_data["controls"]
+    for (
+        device_id,
+        device_controls,
+    ) in controls.items():  # Adjusted to directly access device_controls
         for control, details in device_controls.items():
             if details["type"] == "bool":
                 entities.append(
@@ -25,10 +27,14 @@ async def async_setup_entry(
                         device_id,
                         control,
                         details["value"],
-                        device_data["device_info"],
+                        {
+                            "identifiers": {(DOMAIN, device_id)},
+                            "name": f"v412 Device {device_id}",
+                        },
                     )
                 )
     async_add_entities(entities)
+    hass.data[DOMAIN]["entities"] = entities
 
 
 class ControlSwitch(SwitchEntity):
@@ -61,10 +67,9 @@ class ControlSwitch(SwitchEntity):
             )
         self.async_write_ha_state()
 
-
-async def async_update(self):
-    value = await self.api_client.get_control(self.device_id, self.control)
-    if value is not None:
-        self._attr_is_on = bool(int(value))
-    else:
-        _LOGGER.error(f"Failed to update {self.control} on device {self.device_id}")
+    def update_state(self, value):
+        _LOGGER.debug(
+            f"Setting state for {self.control} on device {self.device_id}: {value}"
+        )
+        self._attr_is_on = bool(value)
+        self.async_write_ha_state()
