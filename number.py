@@ -3,14 +3,15 @@ import logging
 from homeassistant.components.number import NumberEntity
 from .const import DOMAIN
 
+_LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass, entry, async_add_entities):
     api_client = hass.data[DOMAIN][entry.entry_id]["api_client"]
     controls = hass.data[DOMAIN][entry.entry_id]["controls"]
     entities = []
 
-    for device_id, device_data in controls.items():
-        device_controls = device_data["controls"]
+    for device_id, device_controls in controls.items():  # Directly use device_controls
         for control, details in device_controls.items():
             if details["type"] == "int":
                 entities.append(
@@ -18,7 +19,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
                         api_client,
                         device_id,
                         control,
-                        device_data["device_info"],
+                        {
+                            "identifiers": {(DOMAIN, device_id)},
+                            "name": f"v412 Device {device_id}",
+                        },
                         details["min"],
                         details["max"],
                         details["step"],
@@ -27,6 +31,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 )
 
     async_add_entities(entities)
+    hass.data[DOMAIN]["entities"] = entities
 
 
 class ControlNumber(NumberEntity):
@@ -48,3 +53,10 @@ class ControlNumber(NumberEntity):
         if await self.api_client.set_control(self.device_id, self.control, value):
             self._attr_native_value = value
             self.async_write_ha_state()
+
+    def update_state(self, value):
+        _LOGGER.debug(
+            f"Setting value for {self.control} on device {self.device_id}: {value}"
+        )
+        self._attr_native_value = float(value)
+        self.async_write_ha_state()
