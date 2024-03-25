@@ -5,7 +5,7 @@
     "@dicekillsyou161"
   ],
   "config_flow": true,
-  "version": "0.5",
+  "version": "0.55",
   "dependencies": [],
   "documentation": "https://github.com/dicekillsyou161/v412-ctl/",
   "homekit": {},
