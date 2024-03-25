@@ -19,7 +19,7 @@ class V412CtlConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            # Here you can add checks to validate user input, like testing connection to the device
+            # TODO add checks to validate user input, like testing connection to the device
             session = aiohttp_client.async_get_clientsession(self.hass)
             base_url = user_input[CONF_BASE_URL]
             api_key = user_input[CONF_API_KEY]
