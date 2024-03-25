@@ -33,13 +33,13 @@ class CameraControlAPI:
             return {}
 
     async def get_control(self, device, control):
-        url = f"{self.base_url}/camera-status?device={device}&control={control}"
+        url = f"{self.base_url}/camera-status?device={device}&controls={control}"
         response = await self.hass.helpers.aiohttp_client.async_get_clientsession().get(
             url, headers={"Authorization": self.api_key}
         )
         if response.status == 200:
             control_data = await response.json()
-            return control_data.get("value")
+            return control_data.get(control, {}).get("value")
         else:
             _LOGGER.error(
                 "Failed to retrieve value for control %s on device %s: HTTP %s",
@@ -51,7 +51,7 @@ class CameraControlAPI:
 
     async def set_control(self, device, control, value):
         url = f"{self.base_url}/camera-control"
-        data = {"device": device, "control": control, "value": value}
+        data = {"device": device, "controls": {control: value}}
         response = (
             await self.hass.helpers.aiohttp_client.async_get_clientsession().post(
                 url, json=data, headers={"Authorization": self.api_key}
