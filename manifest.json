@@ -1,0 +1,16 @@
+{
+  "domain": "v412ctl",
+  "name": "v412-ctl",
+  "codeowners": [
+    "@dicekillsyou161"
+  ],
+  "config_flow": true,
+  "version": "0.5",
+  "dependencies": [],
+  "documentation": "https://github.com/dicekillsyou161/v412-ctl/",
+  "homekit": {},
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": []
+}
