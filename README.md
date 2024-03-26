@@ -3,7 +3,7 @@ Linux v412-ctl integration for HA, depends on using a custom API Flask app, whic
 
 
 TODO:  
-An actual how-to for installing the integration since it is not HACS linked (and may not ever be tbh EDIT: I dunno, would be nice tbh)
+An actual how-to for installing the integration since it is not HACS linked (and may not ever be tbh)
 
 code comments
 
