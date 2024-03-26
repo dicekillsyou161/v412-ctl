@@ -35,7 +35,7 @@ class CameraControlAPI:
             )
             return {}
 
-    async def get_control(self, device, control):
+    async def get_control(self, device, control):   #broken method currently
         _LOGGER.debug(f"Fetching control {control} for device {device}")
         url = f"{self.base_url}/camera-status?device={device}&controls={control}"
         response = await self.hass.helpers.aiohttp_client.async_get_clientsession().get(
@@ -67,7 +67,7 @@ class CameraControlAPI:
             _LOGGER.debug("No entities to update")
             return
 
-        # Assuming entities are stored as a list and not a dictionary
+
         for entity in self.hass.data[DOMAIN]["entities"]:
             device_id = entity.device_id
             device_controls = await self.list_controls(device_id)
