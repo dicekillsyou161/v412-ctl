@@ -107,7 +107,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     api_client = CameraControlAPI(hass, entry.data["base_url"], entry.data["api_key"])
     device_registry = async_get_device_registry(hass)
 
-    devices_data = ["0", "2"]  # Your actual device IDs here
+    devices_data = ["0", "2"]  # Your actual device IDs here, TODO: make this a setup parameter
     controls = {}
     for device_id in devices_data:
         device_controls = await api_client.list_controls(device_id)
